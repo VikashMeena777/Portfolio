@@ -549,12 +549,24 @@ export default function Home() {
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
 
-  // Custom Cursor state
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [cursorRingPos, setCursorRingPos] = useState({ x: 0, y: 0 });
+  // Custom Cursor Refs
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const isHoveredRef = useRef(false);
+  const isClickedRef = useRef(false);
+
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isCustomCursorActive, setIsCustomCursorActive] = useState(false);
+
+  // Sync state refs to prevent stale closure in animation loop
+  useEffect(() => {
+    isHoveredRef.current = isHovered;
+  }, [isHovered]);
+
+  useEffect(() => {
+    isClickedRef.current = isClicked;
+  }, [isClicked]);
 
   // Console Shell history
   const [consoleHistory, setConsoleHistory] = useState<Array<{ type: "input" | "output"; text: string }>>([
@@ -569,7 +581,7 @@ export default function Home() {
     soundSystemRef.current = new SoundSystem(soundEnabled);
   }, [soundEnabled]);
 
-  // Dynamic Custom Cursor pointer tracking
+  // Dynamic Custom Cursor pointer tracking & position update
   useEffect(() => {
     const mql = window.matchMedia("(pointer: fine)");
     const handleMql = (e: MediaQueryListEvent | MediaQueryList) => {
@@ -578,8 +590,17 @@ export default function Home() {
     mql.addEventListener("change", handleMql);
     handleMql(mql);
 
+    let targetX = 0;
+    let targetY = 0;
+    let dotX = 0;
+    let dotY = 0;
+    let ringX = 0;
+    let ringY = 0;
+    let animId: number;
+
     const onMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
+      targetX = e.clientX;
+      targetY = e.clientY;
     };
 
     const onMouseDown = () => {
@@ -588,35 +609,39 @@ export default function Home() {
     };
     const onMouseUp = () => setIsClicked(false);
 
+    const updatePosition = () => {
+      // Smooth interpolation
+      dotX += (targetX - dotX) * 0.45;
+      dotY += (targetY - dotY) * 0.45;
+      ringX += (targetX - ringX) * 0.16;
+      ringY += (targetY - ringY) * 0.16;
+
+      const dotScale = isClickedRef.current ? 0.8 : isHoveredRef.current ? 1.4 : 1;
+      const ringScale = isClickedRef.current ? 1.3 : isHoveredRef.current ? 0.6 : 1;
+
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+      }
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${ringScale})`;
+      }
+
+      animId = requestAnimationFrame(updatePosition);
+    };
+
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
+    animId = requestAnimationFrame(updatePosition);
 
     return () => {
       mql.removeEventListener("change", handleMql);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
+      cancelAnimationFrame(animId);
     };
   }, []);
-
-  // Soft cursor follow spring lag
-  useEffect(() => {
-    let animId: number;
-    const updateRing = () => {
-      setCursorRingPos(prev => {
-        const dx = cursorPos.x - prev.x;
-        const dy = cursorPos.y - prev.y;
-        return {
-          x: prev.x + dx * 0.18,
-          y: prev.y + dy * 0.18
-        };
-      });
-      animId = requestAnimationFrame(updateRing);
-    };
-    animId = requestAnimationFrame(updateRing);
-    return () => cancelAnimationFrame(animId);
-  }, [cursorPos]);
 
   // Card Mouse Move spotlight dynamic gradients
   const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -748,16 +773,15 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
       {/* Custom Mouse Cursor Reticle */}
       {isCustomCursorActive && (
         <>
-          <motion.div
-            className="fixed top-0 left-0 w-2 h-2 bg-primary rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
-            style={{ x: cursorPos.x, y: cursorPos.y }}
-            animate={{ scale: isClicked ? 0.8 : isHovered ? 1.5 : 1 }}
+          <div
+            ref={dotRef}
+            className="fixed top-0 left-0 w-2 h-2 bg-primary rounded-full pointer-events-none z-[9999] mix-blend-difference"
+            style={{ transform: "translate3d(0px, 0px, 0) translate(-50%, -50%) scale(1)" }}
           />
-          <motion.div
-            className="fixed top-0 left-0 w-8 h-8 border border-primary/45 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 mix-blend-difference flex items-center justify-center"
-            style={{ x: cursorRingPos.x, y: cursorRingPos.y }}
-            animate={{ scale: isClicked ? 1.4 : isHovered ? 0.6 : 1 }}
-            transition={{ type: "spring", damping: 25, stiffness: 250 }}
+          <div
+            ref={ringRef}
+            className="fixed top-0 left-0 w-8 h-8 border border-primary/45 rounded-full pointer-events-none z-[9998] mix-blend-difference flex items-center justify-center"
+            style={{ transform: "translate3d(0px, 0px, 0) translate(-50%, -50%) scale(1)" }}
           />
         </>
       )}
