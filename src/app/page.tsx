@@ -298,7 +298,7 @@ export default function Home() {
   const [expanded, setExpanded] = useState(false);
   const [activeCommand, setActiveCommand] = useState("/hire");
   const [commandOutput, setCommandOutput] = useState("");
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalContainerRef = useRef<HTMLDivElement>(null);
 
   // Typewriter effect for terminal simulation in Hero
   useEffect(() => {
@@ -319,8 +319,11 @@ export default function Home() {
   }, [logIndex]);
 
   useEffect(() => {
-    if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (terminalContainerRef.current) {
+      terminalContainerRef.current.scrollTo({
+        top: terminalContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
     }
   }, [logs]);
 
@@ -477,7 +480,7 @@ Running: tail -n 5 automation.log
           </div>
 
           {/* Terminal Console Logs */}
-          <div className="flex-1 overflow-y-auto space-y-2 text-gray-300 pr-2">
+          <div ref={terminalContainerRef} className="flex-1 overflow-y-auto space-y-2 text-gray-300 pr-2">
             <AnimatePresence>
               {logs.map((log, i) => (
                 <motion.div
@@ -492,7 +495,6 @@ Running: tail -n 5 automation.log
               ))}
             </AnimatePresence>
             <div className="cursor-blink inline-block text-primary" />
-            <div ref={terminalEndRef} />
           </div>
         </motion.div>
       </section>
