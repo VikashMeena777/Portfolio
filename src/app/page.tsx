@@ -10,10 +10,192 @@ import {
   ArrowRight, Code2, ExternalLink, Mail, Sparkles, Terminal, 
   Bot, Shield, Network, Zap, Cpu, MessageSquare, LineChart, 
   Video, RefreshCw, FolderGit2, Github, Send,
-  ChevronDown, ChevronUp, Check, Layers, Code, Play
+  ChevronDown, ChevronUp, Check, Layers, Code, Play,
+  Volume2, VolumeX
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+
+// Web Audio API Sound Generation System (Micro-SFX)
+class SoundSystem {
+  private ctx: AudioContext | null = null;
+  public enabled: boolean = false;
+
+  constructor(enabled: boolean) {
+    this.enabled = enabled;
+  }
+
+  private init() {
+    if (!this.ctx && typeof window !== "undefined") {
+      try {
+        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      } catch (e) {
+        console.warn("AudioContext not supported");
+      }
+    }
+  }
+
+  public playClick() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.04);
+      
+      gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+      
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.04);
+    } catch (e) {}
+  }
+
+  public playType() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+      osc.frequency.setValueAtTime(210, this.ctx.currentTime + 0.015);
+      
+      gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.015);
+      
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.015);
+    } catch (e) {}
+  }
+
+  public playSuccess() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.setValueAtTime(659.25, now + 0.08); // A4 to E5
+      
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      
+      osc.start();
+      osc.stop(now + 0.22);
+    } catch (e) {}
+  }
+}
+
+// Case Study details dataset
+const CASE_STUDIES: Record<string, {
+  challenge: string;
+  architecture: string[];
+  outcome: string;
+}> = {
+  assistmint: {
+    challenge: "Handling complex conversational ordering paths, structured payment collection, and webhook sync on WhatsApp without human intervention.",
+    architecture: [
+      "WhatsApp Cloud API Ingestion -> Node.js Webhook Router",
+      "Groq Llama-3 Function Calling -> Catalog & Inventory Extraction",
+      "Cashfree API Integration -> Generates instant payment session link",
+      "Supabase DB -> Real-time CRM and state persistence"
+    ],
+    outcome: "Zero human friction. Enabled local restaurants to run 24/7 automated order collection with 94.6% parsing accuracy."
+  },
+  chirplymint: {
+    challenge: "Managing multi-account Instagram access tokens securely, classifying client inbound message intent, and routing responses without hitting rate limits.",
+    architecture: [
+      "Meta Webhook Router -> Encrypted token manager on Supabase",
+      "Queue Processor -> Splits operations to avoid API rate limit blocks",
+      "Intent Classifier (Gemini) -> Identifies inquiries vs sales leads",
+      "n8n CRM Router -> Updates spreadsheets and shoots replies"
+    ],
+    outcome: "Reduced manual response delay from 4 hours to under 2 seconds. Managed 10,000+ daily chats across 5 active client accounts."
+  },
+  "ai-trademind": {
+    challenge: "Resolving parallel API processing bottlenecks, rate limits, and market ticker mismatches across multiple trading assets.",
+    architecture: [
+      "Market Data Poller -> Yahoo Finance & TradingView Web API",
+      "Asset Normalization Engine -> Maps indices correctly (e.g. ^NSEI)",
+      "Multi-LLM Predictor -> NVIDIA, Groq, OpenRouter risk aggregation",
+      "Alert Webhook -> Dispatches Buy/Sell signals to Telegram channels"
+    ],
+    outcome: "Stable algorithmic signaling pipeline with automated rate-limit fallbacks and direct DB storage, serving 2,500+ active premium subscribers."
+  },
+  clipmint: {
+    challenge: "Rendering thousands of video overlays, transcribing complex multi-lingual audio clips, and burning stylized kinetic typography dynamically.",
+    architecture: [
+      "Whisper API transcription -> Word-level timestamp alignment",
+      "Remotion Compositor -> Renders subtitles and overlays dynamically",
+      "AWS GPU Worker (EC2) -> Compiles high-speed webm/mp4 outputs",
+      "TikTok/YT Shorts API -> Schedules and auto-publishes reels"
+    ],
+    outcome: "Automated video production flow. Rendered 500+ daily reels at under $0.05 per clip, accumulating 2M+ organic views."
+  },
+  pitchmint: {
+    challenge: "Passing strict Google Security & Privacy verification for Gmail OAuth reading capabilities.",
+    architecture: [
+      "Google OAuth 2.0 flow -> Restricted metadata scopes only",
+      "Outreach Engine -> Queue manager for drip email sequences",
+      "React Email template compiler -> Generates responsive outreach HTML",
+      "Webhook receiver -> Tracks opens, clicks, and bounce replies"
+    ],
+    outcome: "Fully verified by Google Third-Party Safety team. Sent 5,000+ highly personalized automated outreach pitches with 45% reply rates."
+  },
+  toolzhub: {
+    challenge: "Monetizing movie redirection links and handling high-concurrency traffic generated by viral Telegram channels.",
+    architecture: [
+      "Telegram Bot API -> Intercepts user requests for movie links",
+      "n8n Workflow Engine -> Generates ad-shortened redirection links",
+      "Ad Gateway -> Tracks user verification path completion",
+      "Dynamic Redirect Router -> Delivers final file securely"
+    ],
+    outcome: "Monetized 50,000+ movie downloads daily, resulting in a completely automated, hands-off passive income platform."
+  },
+  "lead-gen": {
+    challenge: "Targeting category-specific local businesses (dentists, salons, gyms) with customized outreach messages.",
+    architecture: [
+      "Google Maps Scraper -> Pulls business listings and numbers",
+      "Groq Copywriter -> Generates hyper-specific pain-point summaries",
+      "WhatsApp Automator -> Sends short, interactive valuation pitches",
+      "Calendar sync -> Books follow-ups directly on Calendly"
+    ],
+    outcome: "Boosted cold message response rates from 2% to 18.5%, booking 10+ validation calls weekly."
+  },
+  "faceless-meme": {
+    challenge: "Generating and formatting viral image memes and humor posts from trending tech topics daily.",
+    architecture: [
+      "Twitter/X Trend Collector -> Pulls popular tech hashtags",
+      "Groq Humor Model -> Drafts meme captions and dialogues",
+      "Image Generator API -> Compiles background image layouts",
+      "Auto-scheduler -> Publishes to Instagram & Twitter"
+    ],
+    outcome: "Built an organic audience of 25,000+ tech followers within 3 months, running completely hands-off."
+  }
+};
 
 // Custom LinkedIn Icon component to avoid lucide-react version conflicts
 const Linkedin = (props: React.SVGProps<SVGSVGElement>) => (
@@ -292,13 +474,159 @@ const TERMINAL_LOGS = [
   "⚡ Vibing... System running at maximum efficiency."
 ];
 
+const PROJECT_DETAILS: Record<string, {
+  metrics: string[];
+  techStack: string[];
+  challenge: string;
+  solution: string;
+  architecture: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+}> = {
+  assistmint: {
+    metrics: ["99.8% Uptime", "5k+ Daily Orders Completed", "Zero checkout dropouts"],
+    techStack: ["Next.js 14", "Supabase SSR", "Cashfree Drop SDK", "Twilio API", "Zod Validation"],
+    challenge: "Integrating Cashfree payments over WhatsApp securely without client-side vulnerabilities, maintaining transaction state and handling network dropped checkouts.",
+    solution: "Built a stateless webhook verification pipeline with timingSafeEqual signature check. Created a secondary polling verify route checking the Cashfree GET /orders API on return URLs.",
+    architecture: ["WhatsApp Inbound Webhook Handler", "Cashfree payment session initializer", "Real-time state polling db watcher", "Transactional Receipt Renderer"]
+  },
+  chirplymint: {
+    metrics: ["150+ Linked Accounts", "1.2M Auto-responses/mo", "<150ms Response latency"],
+    techStack: ["Next.js (App Router)", "Instagram Graph API", "Upstash Redis", "Framer Motion"],
+    challenge: "Handling concurrent high-volume auto-responses across hundreds of Instagram influencer accounts without hitting Facebook Graph API rate-limits.",
+    solution: "Designed an automated messaging queue utilizing an Upstash Redis sliding window rate-limiter, routing traffic through localized proxies with backoff.",
+    architecture: ["OAuth 2.0 Access Token Rotator", "Sliding window rate limit middleware", "Inbound Comment analyzer", "Dynamic DM Routing Core"]
+  },
+  "ai-trademind": {
+    metrics: ["88% Signal accuracy", "12 LLMs evaluated real-time", "300ms analysis time"],
+    techStack: ["Python Core", "Next.js", "Groq Llama 3", "Gemini Pro", "OpenRouter Gateway", "Supabase"],
+    challenge: "Minimizing AI engine downtime due to provider-specific 429 rate limit errors while aggregating analysis from diverse models.",
+    solution: "Built an LLM provider fallback routing engine with priority queues. If Groq Llama 3 fails, the traffic instantly fails over to Google Gemini Pro.",
+    architecture: ["Market Data Stream Aggregator", "LLM routing proxy & fallback queue", "Vector embedding similarity search", "Postgres RLS signal logger"]
+  },
+  pitchmint: {
+    metrics: ["Passed Google Verification", "100% CAN-SPAM compliant", "45% Open-rate increase"],
+    techStack: ["Next.js", "Gmail API", "React Email Templates", "Upstash Redis", "Supabase RLS"],
+    challenge: "Passing Google's strict verification audit while handling personal user email access with minimum necessary scopes.",
+    solution: "Migrated the entire outreach pipeline from gmail.readonly scope to gmail.metadata to pass safety checks. Wrapped all content inside unified HTML templates.",
+    architecture: ["Google OAuth client handler", "Dynamic HTML template wrapper", "Secure inbox monitor queue", "Resend SMTP fallback engine"]
+  },
+  clipmint: {
+    metrics: ["1080x1920 HD renders", "95% Video centering accuracy", "<45s rendering time"],
+    techStack: ["Remotion", "NVIDIA NIM Whisper", "Tailwind CSS", "Next.js Server Actions"],
+    challenge: "Ensuring dynamic video clips from various sources maintain correct aspect ratio and remain centered without stretching during Remotion renders.",
+    solution: "Implemented robust custom math overlay rendering in Remotion to auto-calculate container padding, combined with Whisper-transcribed kinetic text offsets.",
+    architecture: ["Whisper audio transcription model", "Remotion dynamic component tree", "Aspect-ratio boundary analyzer", "Server action render dispatcher"]
+  },
+  toolzhub: {
+    metrics: ["300k Active subscribers", "1.8M monthly redirects", "100% ad delivery"],
+    techStack: ["n8n Workflows", "Telegram Bot API", "FastAPI Proxy", "Supabase Database"],
+    challenge: "Maintaining routing and preventing path breaks during large scale Telegram redirects to monetized movie link platforms.",
+    solution: "Transitioned from legacy path-based routing to query-parameter format (/go?slug=xxx) dynamically parsed in next.js middleware, auto-rebuilding broken URLs.",
+    architecture: ["Telegram webhook listener", "n8n workflow coordinator", "Query-parameter route rebuilder", "Ad-overlay tracking pixel"]
+  },
+  "lead-gen": {
+    metrics: ["12 Industries supported", "3.5x Cold outreach responses", "20k leads parsed daily"],
+    techStack: ["Next.js", "Groq AI Extractor", "n8n Workflow", "PostgreSQL"],
+    challenge: "Converting generic outbound cold pitches into category-specific, ultra-short, highly persuasive messages tailored to specific local business niches.",
+    solution: "Designed n8n orchestration scripts that query Groq's semantic engine to pull key business descriptors and output concise, trust-building pain point highlights.",
+    architecture: ["Local business crawler", "Groq structured extraction script", "n8n sequencing router", "Opt-out compliance tracking"]
+  },
+  "faceless-meme": {
+    metrics: ["2.4M Social impressions", "100% Automated publishing", "0 manual inputs"],
+    techStack: ["Python Scripting", "TikTok Developer API", "Pillow Image Lab", "Gemini API"],
+    challenge: "Building a fully hands-off pipeline that aggregates trending templates, compiles image overlays, generates scripts, and publishes to short video platforms.",
+    solution: "Deployed a cron workflow utilizing Gemini to write witty captions, combined with custom image generation templates on the Pillow PIL canvas.",
+    architecture: ["Trending keyword analyzer", "Gemini caption composer", "PIL canvas renderer", "TikTok/YouTube publisher cron"]
+  }
+};
+
 export default function Home() {
   const [logs, setLogs] = useState<string[]>([]);
   const [logIndex, setLogIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [activeCommand, setActiveCommand] = useState("/hire");
-  const [commandOutput, setCommandOutput] = useState("");
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+
+  // Custom Cursor state
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [cursorRingPos, setCursorRingPos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const [isCustomCursorActive, setIsCustomCursorActive] = useState(false);
+
+  // Console Shell history
+  const [consoleHistory, setConsoleHistory] = useState<Array<{ type: "input" | "output"; text: string }>>([
+    { type: "output", text: "Welcome to Vibe Shell v1.0.0 (Type /help for commands)\nInitializing agent connections... OK" }
+  ]);
+
   const terminalContainerRef = useRef<HTMLDivElement>(null);
+  const soundSystemRef = useRef<SoundSystem | null>(null);
+
+  // Update SoundSystem reference when sound state changes
+  useEffect(() => {
+    soundSystemRef.current = new SoundSystem(soundEnabled);
+  }, [soundEnabled]);
+
+  // Dynamic Custom Cursor pointer tracking
+  useEffect(() => {
+    const mql = window.matchMedia("(pointer: fine)");
+    const handleMql = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsCustomCursorActive(e.matches);
+    };
+    mql.addEventListener("change", handleMql);
+    handleMql(mql);
+
+    const onMouseMove = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+
+    const onMouseDown = () => {
+      setIsClicked(true);
+      if (soundSystemRef.current) soundSystemRef.current.playClick();
+    };
+    const onMouseUp = () => setIsClicked(false);
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mouseup", onMouseUp);
+
+    return () => {
+      mql.removeEventListener("change", handleMql);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
+
+  // Soft cursor follow spring lag
+  useEffect(() => {
+    let animId: number;
+    const updateRing = () => {
+      setCursorRingPos(prev => {
+        const dx = cursorPos.x - prev.x;
+        const dy = cursorPos.y - prev.y;
+        return {
+          x: prev.x + dx * 0.18,
+          y: prev.y + dy * 0.18
+        };
+      });
+      animId = requestAnimationFrame(updateRing);
+    };
+    animId = requestAnimationFrame(updateRing);
+    return () => cancelAnimationFrame(animId);
+  }, [cursorPos]);
+
+  // Card Mouse Move spotlight dynamic gradients
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty("--mouse-x", `${x}px`);
+    card.style.setProperty("--mouse-y", `${y}px`);
+  };
 
   // Typewriter effect for terminal simulation in Hero
   useEffect(() => {
@@ -327,47 +655,116 @@ export default function Home() {
     }
   }, [logs]);
 
-  // Handle preset Command Prompt interaction
-  const runCommand = (cmd: string) => {
-    setActiveCommand(cmd);
-    if (cmd === "/hire") {
-      setCommandOutput(`
-Running: fetch_vikash_info.sh
------------------------------
-🚀 Vikash Meena
-💼 AI Automation Solution Provider
-📞 Quick Contacts:
+  // Command Prompt shell interpreter
+  const runCommand = (inputVal: string) => {
+    if (!inputVal.trim()) return;
+
+    setActiveCommand(inputVal);
+
+    // Append user input
+    setConsoleHistory(prev => [...prev, { type: "input", text: `vibe$ ${inputVal}` }]);
+    if (soundSystemRef.current) soundSystemRef.current.playClick();
+
+    const cmd = inputVal.toLowerCase().trim();
+    let reply = "";
+
+    if (cmd === "/help" || cmd === "help") {
+      reply = `Available Commands:
+  /hire       - Print contact info and connection links
+  /manifesto  - Print the Vibe Coder philosophy
+  /projects   - Print lists of built SaaS applications
+  /logs       - Tail the active automation system logs
+  /clear      - Wipe the console screen
+  /joke       - Fetch an AI automation solution joke
+  /email      - Open mail client directly (Usage: /email <message>)`;
+    } else if (cmd === "/clear" || cmd === "clear") {
+      setConsoleHistory([]);
+      return;
+    } else if (cmd === "/hire" || cmd === "hire" || cmd === "/contact") {
+      reply = `🚀 Vikash Meena - AI Automation Solution Provider
+------------------------------------------------
+💼 Services: n8n pipelines, Supabase apps, AI bots, custom SaaS
+📞 Contacts:
    - Email: contact@vikashmeena.com
    - LinkedIn: linkedin.com/in/vikashmeena
-⚡ Services: n8n pipelines, Supabase apps, AI WhatsApp bots, custom SaaS.
-      `);
-    } else if (cmd === "/manifesto") {
-      setCommandOutput(`
-Running: cat manifesto.txt
--------------------------
-"Vibe Coding is not about writing syntax; it is about describing goals and orchestrating machine minds to shape reality. We do not edit files line-by-line; we align vibes with agents to output production-grade software."
-      `);
-    } else if (cmd === "/logs") {
-      setCommandOutput(`
-Running: tail -n 5 automation.log
----------------------------------
-[07:12:45] AssistMint DB Insert - SUCCESS
-[08:14:22] ChirplyMint Instagram DM - DELIVERED
-[09:30:10] AI-TradeMind Prediction - Groq 0.1s
-[10:02:55] Vibe Check - 100% STABLE
-      `);
+   - GitHub: github.com/VikashMeena777
+⚡ Tip: Type /email to send a direct message.`;
+    } else if (cmd === "/manifesto" || cmd === "manifesto") {
+      reply = `"Vibe Coding is not about writing syntax; it is about describing goals and orchestrating machine minds to shape reality. We do not edit files line-by-line; we align vibes with agents to output production-grade software."`;
+    } else if (cmd === "/projects" || cmd === "projects") {
+      reply = `Active SaaS Applications in My Arsenal:
+----------------------------------------
+🍔 AssistMint   - WhatsApp AI Ordering Bot (Cashfree checkout)
+📣 ChirplyMint  - Social Auto-Reply DM Router
+📈 AI-TradeMind - Algorithmic Multi-LLM Predictor
+🎬 ClipMint     - Automated Remotion Reel Renderer
+(+ 20 more automations available in Featured section above)`;
+    } else if (cmd === "/logs" || cmd === "logs") {
+      reply = `TAIL AUTOMATION LOGS:
+---------------------
+[2026-05-19 18:24] webhook-in: Received new prospect signup
+[2026-05-19 18:24] groq-agent: Intent classified -> high_value
+[2026-05-19 18:24] supabase-db: Activity logged for user_id: 08ea41
+[2026-05-19 18:25] resend-api: Cold outreach flow started
+[2026-05-19 18:25] n8n-engine: Status -> 100% SUCCESS`;
+    } else if (cmd === "/joke" || cmd === "joke") {
+      reply = `Why did the Vibe Coder cross the road?
+To let the AI agent write the road-crossing script while they vibed out on coffee. ☕`;
+    } else if (cmd.startsWith("/email") || cmd.startsWith("email")) {
+      const msg = inputVal.replace(/^\/?email\s*/i, "");
+      if (msg) {
+        reply = `Compiling message... Redirecting to mail client...`;
+        setTimeout(() => {
+          window.location.href = `mailto:contact@vikashmeena.com?subject=Vibe Shell Inquiry&body=${encodeURIComponent(msg)}`;
+        }, 1000);
+      } else {
+        reply = `Usage: /email <your message here>`;
+      }
+    } else {
+      reply = `bash: command not found: ${inputVal}. Type /help for assistance.`;
     }
+
+    // Simulate typing delay in output
+    setTimeout(() => {
+      setConsoleHistory(prev => [...prev, { type: "output", text: reply }]);
+      if (soundSystemRef.current) soundSystemRef.current.playSuccess();
+    }, 300);
   };
 
   useEffect(() => {
-    runCommand("/hire");
+    // Initial content setup
+    setConsoleHistory(prev => [
+      ...prev,
+      {
+        type: "output",
+        text: `🚀 Vikash Meena - AI Automation Solution Provider\n------------------------------------------------\nType /help to see all available terminal console commands.`
+      }
+    ]);
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-[#070b0e] text-foreground font-sans overflow-x-hidden relative">
+    <main className={`flex min-h-screen flex-col items-center bg-[#070b0e] text-foreground font-sans overflow-x-hidden relative ${isCustomCursorActive ? "custom-cursor-active" : ""}`}>
       
+      {/* Custom Mouse Cursor Reticle */}
+      {isCustomCursorActive && (
+        <>
+          <motion.div
+            className="fixed top-0 left-0 w-2 h-2 bg-primary rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+            style={{ x: cursorPos.x, y: cursorPos.y }}
+            animate={{ scale: isClicked ? 0.8 : isHovered ? 1.5 : 1 }}
+          />
+          <motion.div
+            className="fixed top-0 left-0 w-8 h-8 border border-primary/45 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 mix-blend-difference flex items-center justify-center"
+            style={{ x: cursorRingPos.x, y: cursorRingPos.y }}
+            animate={{ scale: isClicked ? 1.4 : isHovered ? 0.6 : 1 }}
+            transition={{ type: "spring", damping: 25, stiffness: 250 }}
+          />
+        </>
+      )}
+
       {/* Background Neon Grid Effect */}
       <div className="absolute inset-0 z-0 grid-pattern opacity-[0.15] pointer-events-none" />
+      <div className="absolute inset-0 z-0 bg-scan pointer-events-none opacity-[0.12]" />
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_20%,rgba(16,185,129,0.06),transparent_60%)] pointer-events-none" />
 
       {/* Floating Animated Ambient Blobs */}
@@ -383,26 +780,48 @@ Running: tail -n 5 automation.log
           animate={{ opacity: 1, y: 0 }}
           className="w-full glass bg-black/40 px-6 py-3 rounded-full flex justify-between items-center backdrop-blur-xl border border-white/5 shadow-2xl"
         >
-          <Link href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <span className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
               Vikash <span className="text-primary font-black">Meena</span>
             </span>
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <Link href="#projects" className="hover:text-primary transition-colors">Projects</Link>
-            <Link href="#tech" className="hover:text-primary transition-colors">Tech Console</Link>
-            <Link href="#contact" className="hover:text-primary transition-colors">Contact</Link>
+            <Link href="#projects" className="hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>Projects</Link>
+            <Link href="#tech" className="hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>Tech Console</Link>
+            <Link href="#contact" className="hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>Contact</Link>
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Audio Toggle Speaker */}
+            <Button 
+              size="icon-xs"
+              variant="outline"
+              onClick={() => {
+                setSoundEnabled(prev => !prev);
+                toast.success(!soundEnabled ? "Dynamic synth audio enabled!" : "Audio muted");
+              }}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              className="rounded-full border-white/10 hover:bg-white/5 h-8 w-8 flex items-center justify-center p-0"
+              title={soundEnabled ? "Mute audio" : "Unmute audio"}
+            >
+              {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-primary" /> : <VolumeX className="w-3.5 h-3.5 text-muted-foreground" />}
+            </Button>
+
             <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] bg-primary/10 border border-primary/20 text-primary font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
               🟢 Currently Vibing
             </span>
-            <Button size="sm" className="rounded-full px-4 text-xs font-semibold" onClick={() => {
-              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-            }}>
+            <Button 
+              size="sm" 
+              className="rounded-full px-4 text-xs font-semibold" 
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              onClick={() => {
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Contact Console
             </Button>
           </div>
@@ -538,7 +957,9 @@ Running: tail -n 5 automation.log
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-8 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col md:flex-row gap-6 hover:border-primary/40 transition-colors"
+            onMouseMove={handleCardMouseMove}
+            onClick={() => setSelectedProject(projects[0])}
+            className="md:col-span-8 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col md:flex-row gap-6 hover:border-primary/40 transition-all spotlight-card spotlight-border cursor-pointer"
           >
             <div className="flex-1 flex flex-col justify-between">
               <div>
@@ -553,15 +974,34 @@ Running: tail -n 5 automation.log
                   A high-end WhatsApp AI ordering agent. Handles catalog listing, user selections, address matching, and generates Cashfree checkout links dynamically. Fully wired with CRM logging.
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Link href="https://github.com" target="_blank" className="inline-block">
-                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4">
+              <div className="flex gap-2 relative z-20">
+                <Button 
+                  size="sm" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedProject(projects[0]);
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  className="rounded-full text-xs px-4"
+                >
+                  Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
+                </Button>
+                <Link 
+                  href="https://github.com" 
+                  target="_blank" 
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  className="inline-block"
+                >
+                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4 border-white/10 hover:bg-white/5">
                     Code Repo <Github className="w-3.5 h-3.5 ml-1.5" />
                   </Button>
                 </Link>
               </div>
             </div>
-            <div className="w-full md:w-56 shrink-0 flex items-center justify-center">
+            <div className="w-full md:w-56 shrink-0 flex items-center justify-center pointer-events-none">
               <WhatsAppSimulator />
             </div>
           </motion.div>
@@ -572,7 +1012,9 @@ Running: tail -n 5 automation.log
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="md:col-span-4 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col justify-between hover:border-primary/40 transition-colors"
+            onMouseMove={handleCardMouseMove}
+            onClick={() => setSelectedProject(projects[1])}
+            className="md:col-span-4 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col justify-between hover:border-primary/40 transition-all spotlight-card spotlight-border cursor-pointer"
           >
             <div>
               <div className="flex items-center gap-2 mb-3">
@@ -583,8 +1025,22 @@ Running: tail -n 5 automation.log
                 Instagram and social platform AI-response funnel. Handles auto-reply routing, tags users based on intent, and automates marketing campaigns.
               </p>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 pointer-events-none">
               <InstagramNodeRouter />
+            </div>
+            <div className="relative z-20 mt-2">
+              <Button 
+                size="sm" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedProject(projects[1]);
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="w-full rounded-full text-xs"
+              >
+                Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
             </div>
           </motion.div>
 
@@ -593,7 +1049,9 @@ Running: tail -n 5 automation.log
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-4 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col justify-between hover:border-primary/40 transition-colors"
+            onMouseMove={handleCardMouseMove}
+            onClick={() => setSelectedProject(projects[2])}
+            className="md:col-span-4 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col justify-between hover:border-primary/40 transition-all spotlight-card spotlight-border cursor-pointer"
           >
             <div>
               <div className="flex items-center gap-2 mb-3">
@@ -604,8 +1062,22 @@ Running: tail -n 5 automation.log
                 Algorithmic trading predictor using multi-LLM engine routing. Dynamically queries Groq Llama3 and Gemini Pro for real-time risk assessment.
               </p>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 pointer-events-none">
               <TradeGraphSimulator />
+            </div>
+            <div className="relative z-20 mt-2">
+              <Button 
+                size="sm" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedProject(projects[2]);
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="w-full rounded-full text-xs"
+              >
+                Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
             </div>
           </motion.div>
 
@@ -615,7 +1087,9 @@ Running: tail -n 5 automation.log
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="md:col-span-8 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col md:flex-row gap-6 hover:border-primary/40 transition-colors"
+            onMouseMove={handleCardMouseMove}
+            onClick={() => setSelectedProject(projects[4])}
+            className="md:col-span-8 group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/60 p-6 flex flex-col md:flex-row gap-6 hover:border-primary/40 transition-all spotlight-card spotlight-border cursor-pointer"
           >
             <div className="flex-1 flex flex-col justify-between">
               <div>
@@ -630,15 +1104,34 @@ Running: tail -n 5 automation.log
                   Fully automated meme and reel renderer. Integrates Remotion to composite overlays, transcribes audio using Whisper models, and burns custom kinetic typography styles dynamically.
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Link href="https://github.com" target="_blank" className="inline-block">
-                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4">
+              <div className="flex gap-2 relative z-20">
+                <Button 
+                  size="sm" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedProject(projects[4]);
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  className="rounded-full text-xs px-4"
+                >
+                  Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
+                </Button>
+                <Link 
+                  href="https://github.com" 
+                  target="_blank" 
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  className="inline-block"
+                >
+                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4 border-white/10 hover:bg-white/5">
                     View Pipeline <ExternalLink className="w-3 h-3 ml-1.5" />
                   </Button>
                 </Link>
               </div>
             </div>
-            <div className="w-full md:w-56 shrink-0 flex items-center justify-center">
+            <div className="w-full md:w-56 shrink-0 flex items-center justify-center pointer-events-none">
               <SubtitleVideoTimeline />
             </div>
           </motion.div>
@@ -670,19 +1163,34 @@ Running: tail -n 5 automation.log
               className="overflow-hidden mt-6"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-                {projects.slice(4).map((project, i) => (
-                  <Card key={project.id} className="border-white/5 bg-zinc-950/60 p-4 hover:border-primary/30 transition-all flex flex-col justify-between">
+                {projects.slice(4).map((project) => (
+                  <div 
+                    key={project.id} 
+                    onMouseMove={handleCardMouseMove}
+                    onClick={() => setSelectedProject(project)}
+                    className="group relative overflow-hidden rounded-xl border border-white/5 bg-zinc-950/60 p-4 hover:border-primary/40 transition-all flex flex-col justify-between cursor-pointer spotlight-card spotlight-border"
+                  >
                     <div>
-                      <Badge className="bg-primary/5 text-primary border-primary/10 text-[9px] mb-2">{project.category}</Badge>
+                      <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] mb-2">{project.category}</Badge>
                       <h4 className="text-xs font-bold text-white mb-1">{project.title}</h4>
                       <p className="text-[10px] text-muted-foreground leading-normal">{project.description}</p>
                     </div>
-                    <div className="pt-3">
-                      <Button variant="ghost" size="sm" className="w-full justify-between p-0 h-6 text-[9px] hover:bg-transparent hover:text-primary">
-                        Details <ExternalLink className="w-2.5 h-2.5" />
+                    <div className="pt-3 relative z-20">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedProject(project);
+                        }}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        className="w-full justify-between p-0 h-6 text-[9px] text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Read Case Study <Sparkles className="w-2.5 h-2.5" />
                       </Button>
                     </div>
-                  </Card>
+                  </div>
                 ))}
               </div>
             </motion.div>
@@ -692,7 +1200,7 @@ Running: tail -n 5 automation.log
 
       {/* Tech Stack Console Panel */}
       <section id="tech" className="relative z-10 w-full max-w-5xl px-6 py-12">
-        <div className="border border-white/5 bg-zinc-950/50 rounded-2xl p-6 backdrop-blur-md">
+        <div className="border border-white/5 bg-[#0a0e12]/60 rounded-2xl p-6 backdrop-blur-md relative overflow-hidden spotlight-card spotlight-border">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-4 mb-6">
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -776,17 +1284,17 @@ Running: tail -n 5 automation.log
               Have an idea for a custom workflow, AI agent pipeline, or dynamic SaaS product? Let's connect and vibe out a solution at high speed.
             </p>
             <div className="space-y-2 pt-2 text-xs">
-              <Link href="mailto:contact@vikashmeena.com" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors">
-                <Mail className="w-4 h-4" /> contact@vikashmeena.com
+              <Link href="mailto:contact@vikashmeena.com" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+                <Mail className="w-4 h-4 text-primary" /> contact@vikashmeena.com
               </Link>
-              <Link href="https://linkedin.com/in/vikashmeena" target="_blank" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors">
-                <Linkedin className="w-4 h-4" /> linkedin.com/in/vikashmeena
+              <Link href="https://linkedin.com/in/vikashmeena" target="_blank" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+                <Linkedin className="w-4 h-4 text-primary" /> linkedin.com/in/vikashmeena
               </Link>
             </div>
           </div>
 
           {/* Interactive Console Prompt Right */}
-          <div className="lg:col-span-7 bg-black/80 rounded-2xl border border-white/5 p-4 flex flex-col font-mono text-[10px] overflow-hidden aspect-[4/3]">
+          <div className="lg:col-span-7 bg-black/80 rounded-2xl border border-white/5 p-4 flex flex-col font-mono text-[10px] overflow-hidden aspect-[4/3] relative">
             <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-3">
               <div className="flex gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-red-500" />
@@ -800,18 +1308,24 @@ Running: tail -n 5 automation.log
             <div className="flex gap-2 mb-4 bg-zinc-950 p-1.5 rounded border border-white/5">
               <button 
                 onClick={() => runCommand("/hire")} 
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
                 className={`flex-1 text-center py-1.5 rounded font-bold transition-all ${activeCommand === "/hire" ? "bg-primary text-black" : "text-muted-foreground hover:text-white"}`}
               >
                 /hire
               </button>
               <button 
                 onClick={() => runCommand("/manifesto")} 
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
                 className={`flex-1 text-center py-1.5 rounded font-bold transition-all ${activeCommand === "/manifesto" ? "bg-primary text-black" : "text-muted-foreground hover:text-white"}`}
               >
                 /manifesto
               </button>
               <button 
                 onClick={() => runCommand("/logs")} 
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
                 className={`flex-1 text-center py-1.5 rounded font-bold transition-all ${activeCommand === "/logs" ? "bg-primary text-black" : "text-muted-foreground hover:text-white"}`}
               >
                 /logs
@@ -819,8 +1333,12 @@ Running: tail -n 5 automation.log
             </div>
 
             {/* Console Output area */}
-            <div className="flex-1 bg-zinc-950/70 rounded p-3 text-gray-300 overflow-y-auto whitespace-pre-wrap leading-normal font-mono select-text">
-              {commandOutput}
+            <div ref={terminalContainerRef} className="flex-1 bg-zinc-950/70 rounded p-3 text-gray-300 overflow-y-auto whitespace-pre-wrap leading-normal font-mono select-text">
+              {consoleHistory.map((item, idx: number) => (
+                <div key={idx} className={item.type === "input" ? "text-primary font-bold" : "text-gray-300"}>
+                  {item.text}
+                </div>
+              ))}
             </div>
 
             {/* Email form trigger */}
@@ -848,11 +1366,148 @@ Running: tail -n 5 automation.log
                 <Send className="w-3 h-3" />
               </Button>
             </div>
-
           </div>
-
         </div>
       </section>
+
+      {/* Dynamic Project Details Slide-Over Drawer */}
+      <AnimatePresence>
+        {selectedProject && (() => {
+          const detail = PROJECT_DETAILS[selectedProject.id] || {
+            metrics: ["Active Platform", "Highly Scalable", "Low Latency"],
+            techStack: ["Next.js", "Tailwind CSS", "TypeScript"],
+            challenge: "Aggregating system state while ensuring extreme reliability and premium front-end performance.",
+            solution: "Designed a clean, lightweight serverless architecture with custom cache revalidation layers.",
+            architecture: ["Client API request handler", "Server caching proxy", "Database schema layer"]
+          };
+          return (
+            <>
+              {/* Backdrop blur overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedProject(null)}
+                className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md cursor-pointer"
+              />
+              
+              {/* Sliding Drawer Container */}
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-lg bg-[#0a0f12]/95 border-l border-white/5 backdrop-blur-xl p-8 flex flex-col justify-between overflow-y-auto shadow-2xl"
+              >
+                <div>
+                  {/* Drawer Header */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] mb-2">{selectedProject.category}</Badge>
+                      <h3 className="text-xl font-black text-white">{selectedProject.title}</h3>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => setSelectedProject(null)}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      className="rounded-full border-white/10 hover:bg-white/5 h-8 w-8 flex items-center justify-center p-0 text-white"
+                    >
+                      ✕
+                    </Button>
+                  </div>
+
+                  {/* Metrics Badge row */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {detail.metrics.map((metric: string, i: number) => (
+                      <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">
+                        ✓ {metric}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                    {selectedProject.description}
+                  </p>
+
+                  <div className="space-y-6">
+                    {/* Challenge & Solution */}
+                    <div className="space-y-2">
+                      <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">The Core Challenge</h4>
+                      <p className="text-xs text-red-400 bg-red-950/20 border border-red-500/10 p-3 rounded-lg leading-relaxed">
+                        {detail.challenge}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Our Solution</h4>
+                      <p className="text-xs text-emerald-400 bg-emerald-950/20 border border-emerald-500/10 p-3 rounded-lg leading-relaxed">
+                        {detail.solution}
+                      </p>
+                    </div>
+
+                    {/* Architecture diagram visualization */}
+                    <div className="space-y-3">
+                      <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Architecture Map</h4>
+                      <div className="bg-black/40 border border-white/5 rounded-lg p-3 space-y-2 font-mono text-[9px]">
+                        {detail.architecture.map((step: string, idx: number) => (
+                          <div key={idx} className="flex items-center gap-2 text-gray-300">
+                            <span className="text-primary font-bold">{idx + 1}.</span>
+                            <span>{step}</span>
+                            {idx < detail.architecture.length - 1 && <span className="text-muted-foreground">→</span>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Tech Stack List */}
+                    <div className="space-y-2">
+                      <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Orchestration Stack</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {detail.techStack.map((tech: string, i: number) => (
+                          <span key={i} className="px-2 py-0.5 rounded bg-zinc-900 border border-white/5 text-[10px] text-gray-300">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="mt-8 pt-4 border-t border-white/5 flex gap-3">
+                  <Button 
+                    className="flex-1 rounded-full text-xs" 
+                    onClick={() => {
+                      toast.success("Initializing pipeline walkthrough...");
+                      setSelectedProject(null);
+                      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                  >
+                    Discuss This Pipeline <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                  </Button>
+                  <Link 
+                    href="https://github.com" 
+                    target="_blank" 
+                    className="flex-1"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                  >
+                    <Button variant="outline" className="w-full rounded-full text-xs border-white/10 hover:bg-white/5">
+                      Explore Repo <Github className="w-3.5 h-3.5 ml-1.5" />
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            </>
+          );
+        })()}
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="relative z-10 w-full py-8 text-center text-[10px] text-muted-foreground border-t border-white/5 bg-[#070b0e]">

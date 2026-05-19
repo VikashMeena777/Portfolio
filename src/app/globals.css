@@ -186,3 +186,85 @@
   content: '_';
   animation: blink 1s step-start infinite;
 }
+
+/* Custom Cursor Reticle */
+@media (pointer: fine) {
+  .custom-cursor-active, .custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+/* Background scanning laser scan */
+@keyframes bg-scan {
+  0% {
+    top: -5%;
+  }
+  100% {
+    top: 105%;
+  }
+}
+
+.laser-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.15) 20%, rgba(16, 185, 129, 0.45) 50%, rgba(16, 185, 129, 0.15) 80%, transparent);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+  animation: bg-scan 16s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Spotlight Card & Border Glow System */
+.spotlight-card {
+  position: relative;
+}
+
+.spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(16, 185, 129, 0.06),
+    transparent 50%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+
+.spotlight-border {
+  position: relative;
+}
+
+.spotlight-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    300px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(16, 185, 129, 0.35),
+    transparent 60%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.spotlight-border:hover::before {
+  opacity: 1;
+}
