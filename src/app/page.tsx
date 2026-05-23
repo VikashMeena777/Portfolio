@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/projects";
 import { 
-  ArrowRight, Code2, ExternalLink, Mail, Sparkles, Terminal, 
+  ArrowRight, Code2, Mail, Sparkles, Terminal, 
   Bot, Shield, Network, Zap, Cpu, MessageSquare, LineChart, 
-  Video, RefreshCw, FolderGit2, Github, Send,
+  Video, RefreshCw, Send,
   ChevronDown, ChevronUp, Check, Layers, Code, Play,
   Volume2, VolumeX
 } from "lucide-react";
@@ -710,8 +710,8 @@ export default function Home() {
 ------------------------------------------------
 💼 Services: n8n pipelines, Supabase apps, AI bots, custom SaaS
 📞 Contacts:
-   - Email: contact@vikashmeena.com
-   - LinkedIn: linkedin.com/in/vikashmeena
+   - Email: VikashMeena52420@gmail.com
+   - LinkedIn: linkedin.com/in/vikash-meena-39333b29a
    - GitHub: github.com/VikashMeena777
 ⚡ Tip: Type /email to send a direct message.`;
     } else if (cmd === "/manifesto" || cmd === "manifesto") {
@@ -740,7 +740,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
       if (msg) {
         reply = `Compiling message... Redirecting to mail client...`;
         setTimeout(() => {
-          window.location.href = `mailto:contact@vikashmeena.com?subject=Vibe Shell Inquiry&body=${encodeURIComponent(msg)}`;
+          window.location.href = `mailto:VikashMeena52420@gmail.com?subject=Vibe Shell Inquiry&body=${encodeURIComponent(msg)}`;
         }, 1000);
       } else {
         reply = `Usage: /email <your message here>`;
@@ -1011,18 +1011,6 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 >
                   Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
-                <Link 
-                  href="https://github.com" 
-                  target="_blank" 
-                  onClick={(e) => e.stopPropagation()}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                  className="inline-block"
-                >
-                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4 border-white/10 hover:bg-white/5">
-                    Code Repo <Github className="w-3.5 h-3.5 ml-1.5" />
-                  </Button>
-                </Link>
               </div>
             </div>
             <div className="w-full md:w-56 shrink-0 flex items-center justify-center pointer-events-none">
@@ -1141,18 +1129,6 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 >
                   Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
-                <Link 
-                  href="https://github.com" 
-                  target="_blank" 
-                  onClick={(e) => e.stopPropagation()}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                  className="inline-block"
-                >
-                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4 border-white/10 hover:bg-white/5">
-                    View Pipeline <ExternalLink className="w-3 h-3 ml-1.5" />
-                  </Button>
-                </Link>
               </div>
             </div>
             <div className="w-full md:w-56 shrink-0 flex items-center justify-center pointer-events-none">
@@ -1308,11 +1284,11 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               Have an idea for a custom workflow, AI agent pipeline, or dynamic SaaS product? Let's connect and vibe out a solution at high speed.
             </p>
             <div className="space-y-2 pt-2 text-xs">
-              <Link href="mailto:contact@vikashmeena.com" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-                <Mail className="w-4 h-4 text-primary" /> contact@vikashmeena.com
+              <Link href="mailto:VikashMeena52420@gmail.com" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+                <Mail className="w-4 h-4 text-primary" /> VikashMeena52420@gmail.com
               </Link>
-              <Link href="https://linkedin.com/in/vikashmeena" target="_blank" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-                <Linkedin className="w-4 h-4 text-primary" /> linkedin.com/in/vikashmeena
+              <Link href="https://www.linkedin.com/in/vikash-meena-39333b29a" target="_blank" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+                <Linkedin className="w-4 h-4 text-primary" /> linkedin.com/in/vikash-meena-39333b29a
               </Link>
             </div>
           </div>
@@ -1377,7 +1353,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                     const val = e.currentTarget.value.trim();
                     if (val) {
                       toast.success("Message compiled! Redirecting to mail client...");
-                      window.location.href = `mailto:contact@vikashmeena.com?subject=Vibe Coding Inquiry&body=${encodeURIComponent(val)}`;
+                      window.location.href = `mailto:VikashMeena52420@gmail.com?subject=Vibe Coding Inquiry&body=${encodeURIComponent(val)}`;
                       e.currentTarget.value = "";
                     }
                   }
@@ -1385,7 +1361,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               />
               <Button size="sm" className="px-3" onClick={() => {
                 toast.success("Opening connection via email...");
-                window.location.href = `mailto:contact@vikashmeena.com`;
+                window.location.href = `mailto:VikashMeena52420@gmail.com`;
               }}>
                 <Send className="w-3 h-3" />
               </Button>
@@ -1503,7 +1479,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 {/* Footer Buttons */}
                 <div className="mt-8 pt-4 border-t border-white/5 flex gap-3">
                   <Button 
-                    className="flex-1 rounded-full text-xs" 
+                    className="w-full rounded-full text-xs" 
                     onClick={() => {
                       toast.success("Initializing pipeline walkthrough...");
                       setSelectedProject(null);
@@ -1514,18 +1490,6 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                   >
                     Discuss This Pipeline <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                   </Button>
-                  <Link 
-                    href="https://github.com" 
-                    target="_blank" 
-                    className="flex-1"
-                    onClick={(e) => e.stopPropagation()}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                  >
-                    <Button variant="outline" className="w-full rounded-full text-xs border-white/10 hover:bg-white/5">
-                      Explore Repo <Github className="w-3.5 h-3.5 ml-1.5" />
-                    </Button>
-                  </Link>
                 </div>
               </motion.div>
             </>
