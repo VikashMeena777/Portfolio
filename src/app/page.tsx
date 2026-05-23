@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/projects";
-import { 
-  ArrowRight, Code2, ExternalLink, Mail, Sparkles, Terminal, 
-  Bot, Shield, Network, Zap, Cpu, MessageSquare, LineChart, 
+import {
+  ArrowRight, Code2, ExternalLink, Mail, Sparkles, Terminal,
+  Bot, Shield, Network, Zap, Cpu, MessageSquare, LineChart,
   Video, RefreshCw, Send,
   ChevronDown, ChevronUp, Check, Layers, Code, Play,
   Volume2, VolumeX
@@ -39,73 +39,73 @@ class SoundSystem {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
-    
+
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      
+
       osc.type = "sine";
       osc.frequency.setValueAtTime(600, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.04);
-      
+
       gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
-      
+
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      
+
       osc.start();
       osc.stop(this.ctx.currentTime + 0.04);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   public playType() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
-    
+
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      
+
       osc.type = "triangle";
       osc.frequency.setValueAtTime(140, this.ctx.currentTime);
       osc.frequency.setValueAtTime(210, this.ctx.currentTime + 0.015);
-      
+
       gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.015);
-      
+
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      
+
       osc.start();
       osc.stop(this.ctx.currentTime + 0.015);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   public playSuccess() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
-    
+
     try {
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      
+
       osc.type = "sine";
       osc.frequency.setValueAtTime(440, now);
       osc.frequency.setValueAtTime(659.25, now + 0.08); // A4 to E5
-      
+
       gain.gain.setValueAtTime(0.04, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-      
+
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      
+
       osc.start();
       osc.stop(now + 0.22);
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 
@@ -282,11 +282,10 @@ function WhatsAppSimulator() {
             key={i}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`max-w-[80%] rounded-lg p-2 ${
-              msg.sender === "user" 
-                ? "bg-[#005c4b] text-white self-end rounded-tr-none" 
+            className={`max-w-[80%] rounded-lg p-2 ${msg.sender === "user"
+                ? "bg-[#005c4b] text-white self-end rounded-tr-none"
                 : "bg-[#202c33] text-gray-200 self-start rounded-tl-none"
-            }`}
+              }`}
           >
             <div>{msg.text}</div>
             <div className="text-[8px] text-right mt-1 opacity-65">{msg.time}</div>
@@ -340,7 +339,7 @@ function TradeGraphSimulator() {
         ${metric.price.toLocaleString()}
         <span className="text-[10px] text-emerald-400 font-normal">▲ +1.4%</span>
       </div>
-      
+
       {/* SVG Neon Line Chart */}
       <svg className="w-full h-20 mt-2 overflow-visible" viewBox="0 0 100 40">
         <path
@@ -386,11 +385,10 @@ function InstagramNodeRouter() {
       {nodes.map((node, i) => (
         <div key={i} className="relative flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`w-4 h-4 rounded-full flex items-center justify-center border text-[8px] font-bold ${
-              activeStep === i 
-                ? "border-primary bg-primary/20 text-primary shadow-[0_0_10px_#10b981]" 
+            <div className={`w-4 h-4 rounded-full flex items-center justify-center border text-[8px] font-bold ${activeStep === i
+                ? "border-primary bg-primary/20 text-primary shadow-[0_0_10px_#10b981]"
                 : "border-white/10 text-muted-foreground"
-            }`}>
+              }`}>
               {i + 1}
             </div>
             <div>
@@ -433,8 +431,8 @@ function SubtitleVideoTimeline() {
           <p className="text-[8px] text-muted-foreground tracking-widest uppercase mb-1">AUTOMATED SUBTITLES</p>
           <div className="flex justify-center flex-wrap gap-1 text-sm font-black tracking-tight">
             {words.map((word, i) => (
-              <span 
-                key={i} 
+              <span
+                key={i}
                 className={`${activeWord === i ? "text-primary scale-110 shadow-[0_0_10px_rgba(16,185,129,0.3)] bg-primary/10 px-1 rounded transition-all duration-200" : "text-white"}`}
               >
                 {word}
@@ -448,8 +446,8 @@ function SubtitleVideoTimeline() {
         {[...Array(20)].map((_, i) => {
           const height = Math.abs(Math.sin(i + activeWord)) * 14 + 2;
           return (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={`flex-1 rounded-full transition-all duration-300 ${activeWord % 2 === 0 ? "bg-primary" : "bg-emerald-700"}`}
               style={{ height: `${height}px` }}
             />
@@ -769,7 +767,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
   return (
     <main className={`flex min-h-screen flex-col items-center bg-[#070b0e] text-foreground font-sans overflow-x-hidden relative ${isCustomCursorActive ? "custom-cursor-active" : ""}`}>
-      
+
       {/* Custom Mouse Cursor Reticle */}
       {isCustomCursorActive && (
         <>
@@ -799,7 +797,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
       {/* Floating Premium Navbar */}
       <nav className="fixed top-4 z-50 w-full max-w-5xl px-4 flex justify-between items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full glass bg-black/40 px-6 py-3 rounded-full flex justify-between items-center backdrop-blur-xl border border-white/5 shadow-2xl"
@@ -818,7 +816,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
           <div className="flex items-center gap-3">
             {/* Audio Toggle Speaker */}
-            <Button 
+            <Button
               size="icon-xs"
               variant="outline"
               onClick={() => {
@@ -837,9 +835,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
               🟢 Currently Vibing
             </span>
-            <Button 
-              size="sm" 
-              className="rounded-full px-4 text-xs font-semibold" 
+            <Button
+              size="sm"
+              className="rounded-full px-4 text-xs font-semibold"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               onClick={() => {
@@ -854,7 +852,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
       {/* Hero Section */}
       <section className="relative z-10 w-full max-w-5xl px-6 pt-32 pb-16 md:pt-44 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
+
         {/* Left Side: Bold Hook & Bio */}
         <div className="lg:col-span-7 space-y-6">
           <motion.div
@@ -873,27 +871,27 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               <span className="text-gradient">Vibe Coding</span>
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground max-w-lg leading-relaxed pt-2">
-              I am an <strong className="text-foreground font-semibold">AI Automation Solution Provider</strong>. 
+              I am an <strong className="text-foreground font-semibold">AI Automation Solution Provider</strong>.
               I design and deploy production-ready cloud architectures, multi-routing LLM pipelines, and webhook-driven bots with zero manual typing.
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-3 pt-4"
           >
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="rounded-full px-7 h-12 text-sm font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
               onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
             >
               View My Arsenal <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
+            <Button
+              size="lg"
+              variant="outline"
               className="rounded-full px-7 h-12 text-sm font-semibold border-white/10 hover:bg-white/5 active:scale-[0.98] transition-all"
               onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
             >
@@ -903,7 +901,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
         </div>
 
         {/* Right Side: Interactive Realtime Terminal Simulator */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -975,9 +973,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
         {/* The 2x2 Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-          
+
           {/* Card 1: AssistMint (Double Columns on Desktop) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -999,8 +997,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 </p>
               </div>
               <div className="flex gap-2 relative z-20">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedProject(projects[0]);
@@ -1011,9 +1009,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 >
                   Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
-                <Link 
-                  href="https://assistmint.novamintnetworks.in" 
-                  target="_blank" 
+                <Link
+                  href="https://assistmint.novamintnetworks.in"
+                  target="_blank"
                   onClick={(e) => e.stopPropagation()}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
@@ -1031,7 +1029,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
           </motion.div>
 
           {/* Card 2: ChirplyMint (Single Column) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1053,8 +1051,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               <InstagramNodeRouter />
             </div>
             <div className="relative z-20 mt-2 flex gap-2">
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedProject(projects[1]);
@@ -1065,9 +1063,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               >
                 Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
               </Button>
-              <Link 
-                href="https://chirplymint.novamintnetworks.in" 
-                target="_blank" 
+              <Link
+                href="https://chirplymint.novamintnetworks.in"
+                target="_blank"
                 onClick={(e) => e.stopPropagation()}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -1081,7 +1079,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
           </motion.div>
 
           {/* Card 3: AI-TradeMind (Single Column) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1102,8 +1100,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               <TradeGraphSimulator />
             </div>
             <div className="relative z-20 mt-2 flex gap-2">
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedProject(projects[2]);
@@ -1114,9 +1112,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               >
                 Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
               </Button>
-              <Link 
-                href="https://ai-trademind.novamintnetworks.in" 
-                target="_blank" 
+              <Link
+                href="https://trademint.novamintnetworks.in"
+                target="_blank"
                 onClick={(e) => e.stopPropagation()}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -1130,7 +1128,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
           </motion.div>
 
           {/* Card 4: ClipMint (Double Columns on Desktop) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1153,8 +1151,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 </p>
               </div>
               <div className="flex gap-2 relative z-20">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedProject(projects[4]);
@@ -1165,9 +1163,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 >
                   Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
-                <Link 
-                  href="https://clipmint.novamintnetworks.in" 
-                  target="_blank" 
+                <Link
+                  href="https://clipmint.novamintnetworks.in"
+                  target="_blank"
                   onClick={(e) => e.stopPropagation()}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
@@ -1188,8 +1186,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
         {/* Collapsible Drawer for Remaining 4 Projects */}
         <div className="mt-8 text-center">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="rounded-full border-white/10 hover:bg-white/5 text-xs px-6"
             onClick={() => setExpanded(!expanded)}
           >
@@ -1203,7 +1201,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
         <AnimatePresence>
           {expanded && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -1212,8 +1210,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
                 {projects.slice(4).map((project) => (
-                  <div 
-                    key={project.id} 
+                  <div
+                    key={project.id}
                     onMouseMove={handleCardMouseMove}
                     onClick={() => setSelectedProject(project)}
                     className="group relative overflow-hidden rounded-xl border border-white/5 bg-zinc-950/60 p-4 hover:border-primary/40 transition-all flex flex-col justify-between cursor-pointer spotlight-card spotlight-border"
@@ -1224,9 +1222,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                       <p className="text-[10px] text-muted-foreground leading-normal">{project.description}</p>
                     </div>
                     <div className="pt-3 relative z-20">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedProject(project);
@@ -1324,7 +1322,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
       {/* Interactive Contact Console Section */}
       <section id="contact" className="relative z-10 w-full max-w-5xl px-6 py-20 border-t border-white/5">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           {/* Header Info Left */}
           <div className="lg:col-span-5 space-y-4">
             <h2 className="text-2xl font-black text-white tracking-tight">Initiate Connection</h2>
@@ -1354,24 +1352,24 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
             {/* Presets Console Menu */}
             <div className="flex gap-2 mb-4 bg-zinc-950 p-1.5 rounded border border-white/5">
-              <button 
-                onClick={() => runCommand("/hire")} 
+              <button
+                onClick={() => runCommand("/hire")}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={`flex-1 text-center py-1.5 rounded font-bold transition-all ${activeCommand === "/hire" ? "bg-primary text-black" : "text-muted-foreground hover:text-white"}`}
               >
                 /hire
               </button>
-              <button 
-                onClick={() => runCommand("/manifesto")} 
+              <button
+                onClick={() => runCommand("/manifesto")}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={`flex-1 text-center py-1.5 rounded font-bold transition-all ${activeCommand === "/manifesto" ? "bg-primary text-black" : "text-muted-foreground hover:text-white"}`}
               >
                 /manifesto
               </button>
-              <button 
-                onClick={() => runCommand("/logs")} 
+              <button
+                onClick={() => runCommand("/logs")}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={`flex-1 text-center py-1.5 rounded font-bold transition-all ${activeCommand === "/logs" ? "bg-primary text-black" : "text-muted-foreground hover:text-white"}`}
@@ -1392,9 +1390,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
             {/* Email form trigger */}
             <div className="mt-3 flex gap-2">
               <span className="text-primary font-bold flex items-center">vibe$</span>
-              <input 
-                type="text" 
-                placeholder="Type your message & press send..." 
+              <input
+                type="text"
+                placeholder="Type your message & press send..."
                 className="flex-1 bg-zinc-900 border border-white/5 rounded px-2.5 py-1 text-white outline-none focus:border-primary/45 transition-colors placeholder:text-muted-foreground/60"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -1438,7 +1436,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 onClick={() => setSelectedProject(null)}
                 className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md cursor-pointer"
               />
-              
+
               {/* Sliding Drawer Container */}
               <motion.div
                 initial={{ x: "100%" }}
@@ -1454,8 +1452,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                       <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] mb-2">{selectedProject.category}</Badge>
                       <h3 className="text-xl font-black text-white">{selectedProject.title}</h3>
                     </div>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="icon"
                       onClick={() => setSelectedProject(null)}
                       onMouseEnter={() => setIsHovered(true)}
@@ -1526,8 +1524,8 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
 
                 {/* Footer Buttons */}
                 <div className="mt-8 pt-4 border-t border-white/5 flex gap-3">
-                  <Button 
-                    className="flex-1 rounded-full text-xs" 
+                  <Button
+                    className="flex-1 rounded-full text-xs"
                     onClick={() => {
                       toast.success("Initializing pipeline walkthrough...");
                       setSelectedProject(null);
@@ -1538,9 +1536,9 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                   >
                     Discuss This Pipeline <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                   </Button>
-                  <Link 
-                    href={`https://${selectedProject.id}.novamintnetworks.in`} 
-                    target="_blank" 
+                  <Link
+                    href={`https://${selectedProject.id}.novamintnetworks.in`}
+                    target="_blank"
                     className="flex-1"
                     onClick={(e) => e.stopPropagation()}
                     onMouseEnter={() => setIsHovered(true)}
