@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/projects";
 import { 
-  ArrowRight, Code2, Mail, Sparkles, Terminal, 
+  ArrowRight, Code2, ExternalLink, Mail, Sparkles, Terminal, 
   Bot, Shield, Network, Zap, Cpu, MessageSquare, LineChart, 
   Video, RefreshCw, Send,
   ChevronDown, ChevronUp, Check, Layers, Code, Play,
@@ -1011,6 +1011,18 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 >
                   Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
+                <Link 
+                  href="https://assistmint.novamintnetworks.in" 
+                  target="_blank" 
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  className="inline-block"
+                >
+                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4 border-white/10 hover:bg-white/5">
+                    Launch App <ExternalLink className="w-3 h-3 ml-1.5" />
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="w-full md:w-56 shrink-0 flex items-center justify-center pointer-events-none">
@@ -1040,7 +1052,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
             <div className="mb-4 pointer-events-none">
               <InstagramNodeRouter />
             </div>
-            <div className="relative z-20 mt-2">
+            <div className="relative z-20 mt-2 flex gap-2">
               <Button 
                 size="sm" 
                 onClick={(e) => {
@@ -1049,10 +1061,22 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="w-full rounded-full text-xs"
+                className="flex-1 rounded-full text-xs"
               >
                 Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
               </Button>
+              <Link 
+                href="https://chirplymint.novamintnetworks.in" 
+                target="_blank" 
+                onClick={(e) => e.stopPropagation()}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="flex-1"
+              >
+                <Button size="sm" variant="outline" className="w-full rounded-full text-xs border-white/10 hover:bg-white/5">
+                  Launch App <ExternalLink className="w-3 h-3 ml-1.5" />
+                </Button>
+              </Link>
             </div>
           </motion.div>
 
@@ -1077,7 +1101,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
             <div className="mb-4 pointer-events-none">
               <TradeGraphSimulator />
             </div>
-            <div className="relative z-20 mt-2">
+            <div className="relative z-20 mt-2 flex gap-2">
               <Button 
                 size="sm" 
                 onClick={(e) => {
@@ -1086,10 +1110,22 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="w-full rounded-full text-xs"
+                className="flex-1 rounded-full text-xs"
               >
                 Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
               </Button>
+              <Link 
+                href="https://ai-trademind.novamintnetworks.in" 
+                target="_blank" 
+                onClick={(e) => e.stopPropagation()}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="flex-1"
+              >
+                <Button size="sm" variant="outline" className="w-full rounded-full text-xs border-white/10 hover:bg-white/5">
+                  Launch App <ExternalLink className="w-3 h-3 ml-1.5" />
+                </Button>
+              </Link>
             </div>
           </motion.div>
 
@@ -1129,6 +1165,18 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 >
                   Case Study <Sparkles className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
+                <Link 
+                  href="https://clipmint.novamintnetworks.in" 
+                  target="_blank" 
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  className="inline-block"
+                >
+                  <Button size="sm" variant="outline" className="rounded-full text-xs px-4 border-white/10 hover:bg-white/5">
+                    Launch App <ExternalLink className="w-3 h-3 ml-1.5" />
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="w-full md:w-56 shrink-0 flex items-center justify-center pointer-events-none">
@@ -1479,7 +1527,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                 {/* Footer Buttons */}
                 <div className="mt-8 pt-4 border-t border-white/5 flex gap-3">
                   <Button 
-                    className="w-full rounded-full text-xs" 
+                    className="flex-1 rounded-full text-xs" 
                     onClick={() => {
                       toast.success("Initializing pipeline walkthrough...");
                       setSelectedProject(null);
@@ -1490,6 +1538,18 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                   >
                     Discuss This Pipeline <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                   </Button>
+                  <Link 
+                    href={`https://${selectedProject.id}.novamintnetworks.in`} 
+                    target="_blank" 
+                    className="flex-1"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                  >
+                    <Button variant="outline" className="w-full rounded-full text-xs border-white/10 hover:bg-white/5">
+                      Launch App <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+                    </Button>
+                  </Link>
                 </div>
               </motion.div>
             </>
