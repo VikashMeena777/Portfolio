@@ -740,7 +740,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
       if (msg) {
         reply = `Compiling message... Redirecting to mail client...`;
         setTimeout(() => {
-          window.location.href = `mailto:VikashMeena52420@gmail.com?subject=Vibe Shell Inquiry&body=${encodeURIComponent(msg)}`;
+          window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=VikashMeena52420@gmail.com&su=Vibe+Shell+Inquiry&body=${encodeURIComponent(msg)}`, "_blank");
         }, 1000);
       } else {
         reply = `Usage: /email <your message here>`;
@@ -1284,7 +1284,7 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
               Have an idea for a custom workflow, AI agent pipeline, or dynamic SaaS product? Let's connect and vibe out a solution at high speed.
             </p>
             <div className="space-y-2 pt-2 text-xs">
-              <Link href="mailto:VikashMeena52420@gmail.com" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+              <Link href="https://mail.google.com/mail/?view=cm&fs=1&to=VikashMeena52420@gmail.com" target="_blank" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
                 <Mail className="w-4 h-4 text-primary" /> VikashMeena52420@gmail.com
               </Link>
               <Link href="https://www.linkedin.com/in/vikash-meena-39333b29a" target="_blank" className="flex items-center gap-2.5 text-muted-foreground hover:text-primary transition-colors" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
@@ -1352,16 +1352,16 @@ To let the AI agent write the road-crossing script while they vibed out on coffe
                   if (e.key === "Enter") {
                     const val = e.currentTarget.value.trim();
                     if (val) {
-                      toast.success("Message compiled! Redirecting to mail client...");
-                      window.location.href = `mailto:VikashMeena52420@gmail.com?subject=Vibe Coding Inquiry&body=${encodeURIComponent(val)}`;
+                      toast.success("Message compiled! Redirecting to Gmail...");
+                      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=VikashMeena52420@gmail.com&su=Vibe+Coding+Inquiry&body=${encodeURIComponent(val)}`, "_blank");
                       e.currentTarget.value = "";
                     }
                   }
                 }}
               />
               <Button size="sm" className="px-3" onClick={() => {
-                toast.success("Opening connection via email...");
-                window.location.href = `mailto:VikashMeena52420@gmail.com`;
+                toast.success("Opening connection via Gmail...");
+                window.open("https://mail.google.com/mail/?view=cm&fs=1&to=VikashMeena52420@gmail.com", "_blank");
               }}>
                 <Send className="w-3 h-3" />
               </Button>
